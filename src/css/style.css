@@ -1,3 +1,37 @@
 * {
   box-sizing: border-box;
 }
+
+body {
+  background-color: #555;
+}
+
+.wrapper {
+  margin: 40px;
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  border: solid blue 5px;
+}
+
+.grig .square {
+  width: 20px;
+  height: 20px;
+}
+
+.wall {
+  background-color: blue;
+}
+
+.gold {
+  background-color: rgb(255, 255, 128);
+  width: 3px;
+  height: 3px;
+}
+
+.power-pill {
+  background-color: rgb(255, 255, 128);
+  border-radius: 10px;
+}
