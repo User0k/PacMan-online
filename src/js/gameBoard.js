@@ -3,15 +3,14 @@ import level from './levels';
 const COLUMNS = 20;
 const grid = document.querySelector('.grid');
 grid.style.width = `${COLUMNS * 20}px`;
+export const squares = [];
 
-export default function createBoard() {
-  const squares = [];
+export const createBoard = function() {
   for (let i = 0; i < level.length; i++) {
     const square = document.createElement('div');
     square.classList.add('square');
     grid.appendChild(square);
     squares.push(square);
-
     if(level[i] === 0) {
       squares[i].classList.add('empty')
     } else if (level[i] === 1) {
