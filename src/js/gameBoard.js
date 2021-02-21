@@ -2,6 +2,7 @@ import level from './levels';
 
 const COLUMNS = 20;
 const grid = document.querySelector('.grid');
+grid.style.width = `${COLUMNS * 20}px`;
 
 export default function createBoard() {
   const squares = [];
