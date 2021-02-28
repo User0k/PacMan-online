@@ -2,6 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const { LoaderOptionsPlugin } = require('webpack');
 
 module.exports = {
     entry: {
@@ -17,7 +18,7 @@ module.exports = {
     },
     plugins: [
       new HtmlWebpackPlugin({
-        title: 'Packman online',
+        title: 'Pacman online',
         template: path.resolve(__dirname, './src/index.html'), //template.html
         filename: 'index.html',
       }),
@@ -55,5 +56,4 @@ module.exports = {
       path: path.resolve(__dirname, './dist'),
       filename: '[name].js',
     },
-  mode: 'development',
 }
