@@ -11,33 +11,31 @@ function createPacman(locat) {
 
 createPacman(curLocation);
 
-class Pacman {
-  constructor(position, move) {
-    this.position = curLocation;
-    this.movement = DIRECTIONS;
+const DIRECTIONS = {
+  ArrowLeft: {
+    move: squares[curLocation - 1],
+    direction: - 1,
+  },
+  ArrowUp: {
+    move: squares[curLocation - COLUMNS],
+    direction: - COLUMNS,
+  },
+  ArrowRight: {
+    move: squares[curLocation + 1],
+    direction: 1,
+  },
+  ArrowDown: {
+    move: squares[curLocation + COLUMNS],
+    direction: COLUMNS,
   }
+};
 
-  movePacman = document.addEventListener('keydown', function(e) {
-    if ((e.code == 'ArrowUp') && (!squares[curLocation - COLUMNS].classList.contains('wall'))) {
+document.addEventListener('keydown', function(e) {
+  for (let key in DIRECTIONS) {
+    if (e.code == key) {
       squares[curLocation].classList.remove('pacman');
-      squares[curLocation - COLUMNS].classList.add('pacman');
-      return curLocation -= COLUMNS
-    } else if (e.code == 'ArrowDown') {
-      squares[curLocation].classList.remove('pacman');
-      squares[curLocation + COLUMNS].classList.add('pacman');
-      return curLocation += COLUMNS
-    } else if (e.code == 'ArrowLeft') {
-      squares[curLocation].classList.remove('pacman');
-      squares[curLocation - 1].classList.add('pacman');
-      return curLocation--
-    } else if (e.code == 'ArrowRight') {
-      squares[curLocation].classList.remove('pacman');
-      squares[curLocation + 1].classList.add('pacman');
-      return curLocation++
+      curLocation += DIRECTIONS[key].direction;
+      squares[curLocation].classList.add('pacman');
     }
-  });
-
-}
-
-const pacman = new Pacman();
-
+  }
+});
