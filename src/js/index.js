@@ -3,6 +3,7 @@ import { COLUMNS, createBoard, squares } from './gameBoard';
 
 createBoard();
 let curLocation = 290;
+let nextSquare = curLocation;
 const DOTSCORE = 10;
 const PILLSCORE = 50;
 const SCAREDSCORE = 200;
@@ -30,7 +31,7 @@ const DIRECTIONS = {
 
 document.addEventListener('keydown', function(e) {
   for (let key in DIRECTIONS) {
-    let nextSquare = squares[curLocation + DIRECTIONS[key].direction]; //variable for better understanding the code
+    nextSquare = squares[curLocation + DIRECTIONS[key].direction]; //variable for better understanding the code
     if (e.code == key
         && !nextSquare.classList.contains('wall')
         && !nextSquare.classList.contains('ghost')) {
@@ -39,4 +40,5 @@ document.addEventListener('keydown', function(e) {
       squares[curLocation].classList.add('pacman');
     }
   }
+  console.log(nextSquare)
 });
