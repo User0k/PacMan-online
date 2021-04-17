@@ -13,10 +13,9 @@ body {
 .grid {
   display: flex;
   flex-wrap: wrap;
-  border: solid blue 5px;
 }
 
-.grig .square {
+.square {
   width: 20px;
   height: 20px;
 }
@@ -25,13 +24,22 @@ body {
   background-color: blue;
 }
 
-.gold {
+.dot {
   background-color: rgb(255, 255, 128);
-  width: 3px;
-  height: 3px;
+  border: 8px solid #555;
 }
 
 .power-pill {
   background-color: rgb(255, 255, 128);
-  border-radius: 10px;
+  border: 4px solid #555;
+  border-radius: 100%;
+}
+
+.pacman {
+  border-radius: 100%;
+  border: 10px solid green;
+}
+
+.ghost {
+  background-color: grey;
 }
