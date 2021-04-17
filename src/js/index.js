@@ -3,7 +3,9 @@ import { COLUMNS, createBoard, squares } from './gameBoard';
 
 createBoard();
 let curLocation = 290;
-//const ROWS = level.length / COLUMNS;
+const DOTSCORE = 10;
+const PILLSCORE = 50;
+const SCAREDSCORE = 200;
 
 function createPacman(locat) {
   squares[locat].classList.add('pacman');
@@ -13,26 +15,25 @@ createPacman(curLocation);
 
 const DIRECTIONS = {
   ArrowLeft: {
-    move: squares[curLocation - 1],
     direction: - 1,
   },
   ArrowUp: {
-    move: squares[curLocation - COLUMNS],
     direction: - COLUMNS,
   },
   ArrowRight: {
-    move: squares[curLocation + 1],
     direction: 1,
   },
   ArrowDown: {
-    move: squares[curLocation + COLUMNS],
     direction: COLUMNS,
   }
 };
 
 document.addEventListener('keydown', function(e) {
   for (let key in DIRECTIONS) {
-    if (e.code == key) {
+    let nextSquare = squares[curLocation + DIRECTIONS[key].direction]; //variable for better understanding the code
+    if (e.code == key
+        && !nextSquare.classList.contains('wall')
+        && !nextSquare.classList.contains('ghost')) {
       squares[curLocation].classList.remove('pacman');
       curLocation += DIRECTIONS[key].direction;
       squares[curLocation].classList.add('pacman');
