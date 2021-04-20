@@ -43,6 +43,7 @@ document.addEventListener('keydown', function(e) {
     }
   }
   dotEat(curLocation);
+  powerEat(curLocation);
 });
 
 function dotEat(location) {
@@ -50,5 +51,14 @@ function dotEat(location) {
     squares[location].classList.remove('dot');
     score += DOTSCORE;
     scoreDisplay.textContent = score;
+  }
+}
+
+function powerEat(location) {
+  if (squares[location].classList.contains('power-pill')) {
+    squares[location].classList.remove('power-pill');
+    score += PILLSCORE;
+    scoreDisplay.textContent = score;
+    makeScared();
   }
 }
