@@ -1,20 +1,34 @@
 import('../css/style.css');
 import { COLUMNS, createBoard, squares } from './gameBoard';
+import Ghost from './ghosts'
 
 createBoard();
 let curLocation = 290;
 let nextSquare = curLocation;
 let score = 0;
 let scoreDisplay = document.querySelector('#score');
+export let scaredTimer = 10000;
 const DOTSCORE = 10;
 const PILLSCORE = 50;
-const SCAREDSCORE = 200;
+let scaredScore = 200;
 
 function createPacman(locat) {
   squares[locat].classList.add('pacman');
 }
 
 createPacman(curLocation);
+
+const GHOSTS = [
+  new Ghost('blinky', 228),
+  new Ghost('pinky', 229),
+  new Ghost('inky', 230),
+  new Ghost('clyde', 231)
+];
+
+GHOSTS.forEach(ghost => {
+  squares[ghost.ghostLocation].classList.add('ghost');
+  squares[ghost.ghostLocation].classList.add(ghost.ghostName);
+});
 
 const DIRECTIONS = {
   ArrowLeft: {
@@ -59,6 +73,6 @@ function powerEat(location) {
     squares[location].classList.remove('power-pill');
     score += PILLSCORE;
     scoreDisplay.textContent = score;
-    makeScared();
+    GHOSTS.forEach(ghost => ghost.scare())
   }
 }
