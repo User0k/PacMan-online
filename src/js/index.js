@@ -1,6 +1,6 @@
 import('../css/style.css');
 import { COLUMNS, createBoard, squares } from './gameBoard';
-import Ghost from './ghosts'
+import Ghost from './ghosts';
 
 createBoard();
 let curLocation = 290;
@@ -28,6 +28,7 @@ const GHOSTS = [
 GHOSTS.forEach(ghost => {
   squares[ghost.ghostLocation].classList.add('ghost');
   squares[ghost.ghostLocation].classList.add(ghost.ghostName);
+  setInterval(ghost.tryMove.bind(ghost), ghost.speed);
 });
 
 const DIRECTIONS = {
@@ -45,7 +46,7 @@ const DIRECTIONS = {
   }
 };
 
-document.addEventListener('keydown', function(e) {
+let movePacman = document.addEventListener('keydown', function(e) {
   for (let key in DIRECTIONS) {
     nextSquare = squares[curLocation + DIRECTIONS[key].direction]; //variable for better understanding the code
     if (e.code == key
