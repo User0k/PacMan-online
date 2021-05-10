@@ -13,7 +13,9 @@ class Ghost {
 
   tryMove() {
     this.nextLocation = this.ghostLocation + this.directions[Math.floor(Math.random() * this.directions.length)];
-    if (squares[this.nextLocation].classList.contains('wall')) this.nextLocation = this.ghostLocation;
+    if (squares[this.nextLocation].classList.contains('wall') ||
+        squares[this.nextLocation].classList.contains('ghost'))
+        this.nextLocation = this.ghostLocation;
     else {
       squares[this.ghostLocation].classList.remove(this.ghostName, 'ghost', 'scared-ghost');
       this.ghostLocation = this.nextLocation;
