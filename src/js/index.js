@@ -59,6 +59,7 @@ let movePacman = document.addEventListener('keydown', function(e) {
   }
   dotEat(curLocation);
   powerEat(curLocation);
+  ghostEat(curLocation);
 });
 
 function dotEat(location) {
@@ -76,4 +77,28 @@ function powerEat(location) {
     scoreDisplay.textContent = score;
     GHOSTS.forEach(ghost => ghost.scare())
   }
+}
+
+function ghostEat(location) {
+  if (squares[location].classList.contains('scared-ghost')) {
+    squares[location].classList.remove('scared-ghost');
+    score += scaredScore;
+    scaredScore *= 2;
+    scoreDisplay.textContent = score;
+    GHOSTS.forEach((ghost) => {
+      // if (squares[ghost.ghostLocation] == squares[location]) {
+      //   ghost.ghostLocation = 23;
+      // };
+      squares[location].classList.remove(ghost.ghostName, 'ghost');
+    });
+  }
+}
+
+export function unscare() {
+  GHOSTS.forEach(ghost => {
+    ghost.isScared = false;
+    squares[ghost.ghostLocation].classList.remove('scared-ghost');
+    squares[ghost.ghostLocation].classList.add('ghost');
+  })
+  scaredScore = 200;
 }
