@@ -76,7 +76,7 @@ function powerEat(location) {
     score += PILLSCORE;
     scoreDisplay.textContent = score;
     scaredScore = 200;
-    GHOSTS.forEach(ghost => ghost.scare())
+    GHOSTS.forEach(ghost => ghost.scare());
   }
 }
 
@@ -94,12 +94,13 @@ export function initTimer() {
 
 function ghostEat(location) {
   if (squares[location].classList.contains('scared-ghost')) {
-    squares[location].classList.remove('scared-ghost');
+    const eatenGhost = GHOSTS.find(ghost => ghost.ghostLocation == location);
+    squares[location].classList.remove('scared-ghost', eatenGhost.ghostName, 'ghost');
+    eatenGhost.isScared = false;
+    //next line will put the eaten ghost into a random square in 228-231 interval (ghost lair)
+    eatenGhost.ghostLocation = Math.ceil(Math.random() * 4 + 227);
     score += scaredScore;
     scaredScore *= 2;
     scoreDisplay.textContent = score;
-    GHOSTS.forEach((ghost) => {
-      squares[location].classList.remove(ghost.ghostName, 'ghost');
-    });
   }
 }
