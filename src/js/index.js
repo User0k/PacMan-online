@@ -59,7 +59,7 @@ let movePacman = document.addEventListener('keydown', function(e) {
   }
   dotEat(curLocation);
   powerEat(curLocation);
-  ghostEat(curLocation);
+  ghostMeetPacman(curLocation);
 });
 
 function dotEat(location) {
@@ -67,7 +67,7 @@ function dotEat(location) {
     squares[location].classList.remove('dot');
     score += DOTSCORE;
     scoreDisplay.textContent = score;
-  }
+  };
 }
 
 function powerEat(location) {
@@ -102,5 +102,12 @@ function ghostEat(location) {
     score += scaredScore;
     scaredScore *= 2;
     scoreDisplay.textContent = score;
+  }
+}
+
+//function decides what to do when pacman will meet a ghost or a ghost will meet pacmen
+export function ghostMeetPacman(location) {
+  if (squares[location].classList.contains('ghost')) {
+    if (squares[location].classList.contains('scared-ghost')) ghostEat(location);
   }
 }

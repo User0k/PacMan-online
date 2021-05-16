@@ -1,5 +1,5 @@
 import { squares, COLUMNS } from './gameBoard';
-import { scaredTimer, initTimer } from './index';
+import { scaredTimer, initTimer, ghostMeetPacman } from './index';
 
 class Ghost {
   constructor(ghostName, ghostLocation) {
@@ -21,6 +21,7 @@ class Ghost {
       this.ghostLocation = this.nextLocation;
       squares[this.ghostLocation].classList.add(this.ghostName, 'ghost');
       if(this.isScared == true) squares[this.ghostLocation].classList.add('scared-ghost');
+      this.meetPacman();
     }
   }
 
@@ -29,6 +30,12 @@ class Ghost {
     squares[this.ghostLocation].classList.add('scared-ghost');
     clearTimeout(scaredTimer);
     initTimer();
+  }
+
+  meetPacman() {
+    if (squares[this.ghostLocation].classList.contains('pacman')) {
+      ghostMeetPacman(this.ghostLocation);
+    };
   }
 };
 export default Ghost;
