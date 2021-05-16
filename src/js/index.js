@@ -93,16 +93,14 @@ export function initTimer() {
 }
 
 function ghostEat(location) {
-  if (squares[location].classList.contains('scared-ghost')) {
-    const eatenGhost = GHOSTS.find(ghost => ghost.ghostLocation == location);
-    squares[location].classList.remove('scared-ghost', eatenGhost.ghostName, 'ghost');
-    eatenGhost.isScared = false;
-    //next line will put the eaten ghost into a random square in 228-231 interval (ghost lair)
-    eatenGhost.ghostLocation = Math.ceil(Math.random() * 4 + 227);
-    score += scaredScore;
-    scaredScore *= 2;
-    scoreDisplay.textContent = score;
-  }
+  const eatenGhost = GHOSTS.find(ghost => ghost.ghostLocation == location);
+  squares[location].classList.remove('scared-ghost', eatenGhost.ghostName, 'ghost');
+  eatenGhost.isScared = false;
+  //next line will put the eaten ghost into a random square in 228-231 interval (ghost lair)
+  eatenGhost.ghostLocation = Math.ceil(Math.random() * 4 + 227);
+  score += scaredScore;
+  scaredScore *= 2;
+  scoreDisplay.textContent = score;
 }
 
 //function decides what to do when pacman will meet a ghost or a ghost will meet pacmen
