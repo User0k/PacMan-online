@@ -12,9 +12,10 @@ export let scaredTimer = null;
 const DOTSCORE = 10;
 const PILLSCORE = 50;
 let scaredScore = 200;
+let lives = 3;
 
-function createPacman(locat) {
-  squares[locat].classList.add('pacman');
+function createPacman(location) {
+  squares[location].classList.add('pacman');
 }
 
 createPacman(curLocation);
@@ -103,9 +104,21 @@ function ghostEat(location) {
   scoreDisplay.textContent = score;
 }
 
+function killPacman(location) {
+  squares[location].classList.remove('pacman');
+  lives--;
+  if (lives > 0) {
+    setTimeout(() => {
+      curLocation = 290;
+      squares[curLocation].classList.add('pacman');
+    }, 1500);
+  } else gameOver();
+}
+
 //function decides what to do when pacman will meet a ghost or a ghost will meet pacmen
 export function ghostMeetPacman(location) {
   if (squares[location].classList.contains('ghost')) {
     if (squares[location].classList.contains('scared-ghost')) ghostEat(location);
+    else killPacman(location);
   }
 }
