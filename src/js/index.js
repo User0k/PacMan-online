@@ -2,17 +2,41 @@ import('../css/style.css');
 import { COLUMNS, createBoard, squares } from './gameBoard';
 import Ghost from './ghosts';
 
-createBoard();
+// DOM
+const scoreDisplay = document.getElementById('score');
+const startBtn = document.getElementById('start-button');
+// other variables
 let curLocation = 290;
 let nextSquare = curLocation;
 let score = 0;
-let scoreDisplay = document.querySelector('#score');
 let powerTime = 10000;
 export let scaredTimer = null;
+let dotCount = null;
 const DOTSCORE = 10;
 const PILLSCORE = 50;
 let scaredScore = 200;
 let lives = 3;
+// constant to control Pacman
+const DIRECTIONS = {
+  ArrowLeft: {
+    direction: - 1,
+  },
+  ArrowUp: {
+    direction: - COLUMNS,
+  },
+  ArrowRight: {
+    direction: 1,
+  },
+  ArrowDown: {
+    direction: COLUMNS,
+  }
+};
+
+createBoard();
+
+(function getDots() {
+  dotCount = squares.filter(square => square.classList.contains('dot')).length;
+})();
 
 function createPacman(location) {
   squares[location].classList.add('pacman');
@@ -28,25 +52,9 @@ const GHOSTS = [
 ];
 
 GHOSTS.forEach(ghost => {
-  squares[ghost.ghostLocation].classList.add('ghost');
-  squares[ghost.ghostLocation].classList.add(ghost.ghostName);
+  squares[ghost.ghostLocation].classList.add('ghost', ghost.ghostName);
   setInterval(ghost.tryMove.bind(ghost), ghost.speed);
 });
-
-const DIRECTIONS = {
-  ArrowLeft: {
-    direction: - 1,
-  },
-  ArrowUp: {
-    direction: - COLUMNS,
-  },
-  ArrowRight: {
-    direction: 1,
-  },
-  ArrowDown: {
-    direction: COLUMNS,
-  }
-};
 
 let movePacman = document.addEventListener('keydown', function(e) {
   for (let key in DIRECTIONS) {
@@ -68,6 +76,7 @@ function dotEat(location) {
     squares[location].classList.remove('dot');
     score += DOTSCORE;
     scoreDisplay.textContent = score;
+    dotCount--;
   };
 }
 
