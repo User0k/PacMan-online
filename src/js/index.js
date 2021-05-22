@@ -40,23 +40,24 @@ function createPacman(location) {
   squares[location].classList.add('pacman');
 }
 
-const GHOSTS = [
-  new Ghost('blinky', 228),
-  new Ghost('pinky', 229),
-  new Ghost('inky', 230),
-  new Ghost('clyde', 231)
-];
-
-let start = startBtn.addEventListener('click', function(e) {
+let start = function(e) {
   startBtn.classList.add('d-none');
   createBoard();
   getDots();
   createPacman(curLocation);
-  GHOSTS.forEach(ghost => {
+
+  let ghosts = [
+    new Ghost('blinky', 228),
+    new Ghost('pinky', 229),
+    new Ghost('inky', 230),
+    new Ghost('clyde', 231)
+  ];
+
+  ghosts.forEach(ghost => {
     squares[ghost.ghostLocation].classList.add('ghost', ghost.ghostName);
     setInterval(ghost.tryMove.bind(ghost), ghost.speed);
   });
-});
+};
 
 let movePacman = function(e) {
   for (let key in DIRECTIONS) {
@@ -71,9 +72,11 @@ let movePacman = function(e) {
   dotEat(curLocation);
   powerEat(curLocation);
   ghostMeetPacman(curLocation);
+  checkForWin();
 }
 
 document.addEventListener('keydown', movePacman);
+startBtn.addEventListener('click', start);
 
 function dotEat(location) {
   if (squares[location].classList.contains('dot')) {
@@ -95,7 +98,7 @@ function powerEat(location) {
 }
 
 function unscare() {
-  GHOSTS.forEach(ghost => {
+  ghosts.forEach(ghost => {
     ghost.isScared = false;
     squares[ghost.ghostLocation].classList.remove('scared-ghost');
   })
@@ -107,7 +110,7 @@ export function initTimer() {
 }
 
 function ghostEat(location) {
-  const eatenGhost = GHOSTS.find(ghost => ghost.ghostLocation == location);
+  const eatenGhost = ghosts.find(ghost => ghost.ghostLocation == location);
   squares[location].classList.remove('scared-ghost', eatenGhost.ghostName, 'ghost');
   eatenGhost.isScared = false;
   //next line will put the eaten ghost into a random square in 228-231 interval (ghost lair)
