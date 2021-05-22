@@ -32,17 +32,13 @@ const DIRECTIONS = {
   }
 };
 
-createBoard();
-
-(function getDots() {
+function getDots() {
   dotCount = squares.filter(square => square.classList.contains('dot')).length;
-})();
+};
 
 function createPacman(location) {
   squares[location].classList.add('pacman');
 }
-
-createPacman(curLocation);
 
 const GHOSTS = [
   new Ghost('blinky', 228),
@@ -51,9 +47,15 @@ const GHOSTS = [
   new Ghost('clyde', 231)
 ];
 
-GHOSTS.forEach(ghost => {
-  squares[ghost.ghostLocation].classList.add('ghost', ghost.ghostName);
-  setInterval(ghost.tryMove.bind(ghost), ghost.speed);
+let start = startBtn.addEventListener('click', function(e) {
+  startBtn.classList.add('d-none');
+  createBoard();
+  getDots();
+  createPacman(curLocation);
+  GHOSTS.forEach(ghost => {
+    squares[ghost.ghostLocation].classList.add('ghost', ghost.ghostName);
+    setInterval(ghost.tryMove.bind(ghost), ghost.speed);
+  });
 });
 
 let movePacman = document.addEventListener('keydown', function(e) {
