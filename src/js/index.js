@@ -58,7 +58,7 @@ let start = startBtn.addEventListener('click', function(e) {
   });
 });
 
-let movePacman = document.addEventListener('keydown', function(e) {
+let movePacman = function(e) {
   for (let key in DIRECTIONS) {
     nextSquare = squares[curLocation + DIRECTIONS[key].direction]; //variable for better understanding the code
     if (e.code == key
@@ -71,7 +71,9 @@ let movePacman = document.addEventListener('keydown', function(e) {
   dotEat(curLocation);
   powerEat(curLocation);
   ghostMeetPacman(curLocation);
-});
+}
+
+document.addEventListener('keydown', movePacman);
 
 function dotEat(location) {
   if (squares[location].classList.contains('dot')) {
