@@ -20,8 +20,12 @@ body {
   height: 20px;
 }
 
+.d-none {
+  display: none;
+}
+
 .wall {
-  background-color: blue;
+  background-image: url('../img/wall.jpg');
 }
 
 .dot {
@@ -90,4 +94,30 @@ body {
 
 .scared-ghost {
   background: blue !important;
+}
+
+#start-button {
+  color: antiquewhite;
+  position: absolute;
+  background: url('../img/packman.png') no-repeat;
+  width: 125px;
+  height: 125px;
+  border: none;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+}
+
+#start-button::before {
+  position: absolute;
+  content: 'click to PLAY';
+  top: 53%;
+  right: -82%;
+  font-size: 20px;
+  transition: .5s;
+}
+
+#start-button:hover::before {
+  right: -38%;
 }
