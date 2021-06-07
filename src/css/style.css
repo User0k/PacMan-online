@@ -1,5 +1,14 @@
+@font-face {
+  font-family: 'MV-Boli';
+  src: url('../fonts/Mv\ Boli.woff2') format('woff2'),
+    url('../fonts/Mv-Boli.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+}
+
 * {
   box-sizing: border-box;
+  font-family: 'MV-Boli', sans-serif;
 }
 
 body {
@@ -8,6 +17,19 @@ body {
 
 .wrapper {
   display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.game-info {
+  display: flex;
+}
+
+h1, h2 {
+  margin: 0;
+  /* padding: 5px 65px; */
+  color: antiquewhite;
+  font-size: 34px;
 }
 
 .grid {
