@@ -1,21 +1,29 @@
 import('../css/style.css');
-import { COLUMNS, createBoard, squares } from './gameBoard';
+import Board from './gameBoard'
+import { COLUMNS, squares } from './gameBoard';
 import Ghost from './ghosts';
+import level from './levels';
 
 // DOM
+const hider = document.getElementById('hider');
 const scoreDisplay = document.getElementById('score');
+const livesDisplay = document.getElementById('lives');
 const startBtn = document.getElementById('start-button');
+const winner = document.getElementById('winner');
+const loser = document.getElementById('loser');
 // other variables
 let curLocation = 290;
 let nextSquare = curLocation;
 let score = 0;
 let powerTime = 10000;
 export let scaredTimer = null;
+let ghosts = null;
 let dotCount = null;
 const DOTSCORE = 10;
 const PILLSCORE = 50;
 let scaredScore = 200;
 let lives = 3;
+const gameBoard = new Board;
 // constant to control Pacman
 const DIRECTIONS = {
   ArrowLeft: {
@@ -36,17 +44,18 @@ function getDots() {
   dotCount = squares.filter(square => square.classList.contains('dot')).length;
 };
 
-function createPacman(location) {
-  squares[location].classList.add('pacman');
-}
-
-let start = function(e) {
+function start() {
   startBtn.classList.add('d-none');
-  createBoard();
-  getDots();
-  createPacman(curLocation);
+  hider.classList.remove('d-none');
+  renderBoard();
+};
 
-  let ghosts = [
+function renderBoard() {
+  gameBoard.createBoard();
+  getDots();
+  squares[curLocation].classList.add('pacman');
+
+  ghosts = [
     new Ghost('blinky', 228),
     new Ghost('pinky', 229),
     new Ghost('inky', 230),
@@ -57,9 +66,9 @@ let start = function(e) {
     squares[ghost.ghostLocation].classList.add('ghost', ghost.ghostName);
     setInterval(ghost.tryMove.bind(ghost), ghost.speed);
   });
-};
+}
 
-let movePacman = function(e) {
+function movePacman(e) {
   for (let key in DIRECTIONS) {
     nextSquare = squares[curLocation + DIRECTIONS[key].direction]; //variable for better understanding the code
     if (e.code == key
@@ -67,8 +76,8 @@ let movePacman = function(e) {
       squares[curLocation].classList.remove('pacman');
       curLocation += DIRECTIONS[key].direction;
       squares[curLocation].classList.add('pacman');
-    }
-  }
+    };
+  };
   dotEat(curLocation);
   powerEat(curLocation);
   ghostMeetPacman(curLocation);
@@ -77,6 +86,19 @@ let movePacman = function(e) {
 
 document.addEventListener('keydown', movePacman);
 startBtn.addEventListener('click', start);
+
+function renderNextLevel() {
+    winner.classList.add('d-none');
+    gameBoard.curLevel = level[gameBoard.levelNumber];
+    gameBoard.clearBoard();
+    renderBoard();
+    squares[curLocation].classList.remove('pacman');
+    curLocation = 290;
+    squares[curLocation].classList.add('pacman');
+    document.addEventListener('keydown', movePacman);
+    const grids = document.querySelectorAll('.grid');
+    gameBoard.wrapper.removeChild(grids[1]);
+}
 
 function dotEat(location) {
   if (squares[location].classList.contains('dot')) {
@@ -93,7 +115,7 @@ function powerEat(location) {
     score += PILLSCORE;
     scoreDisplay.textContent = score;
     scaredScore = 200;
-    GHOSTS.forEach(ghost => ghost.scare());
+    ghosts.forEach(ghost => ghost.scare());
   }
 }
 
@@ -123,6 +145,7 @@ function ghostEat(location) {
 function killPacman(location) {
   squares[location].classList.remove('pacman');
   lives--;
+  livesDisplay.textContent = lives;
   if (lives > 0) {
     setTimeout(() => {
       curLocation = 290;
