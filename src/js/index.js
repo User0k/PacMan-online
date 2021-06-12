@@ -87,6 +87,28 @@ function movePacman(e) {
 document.addEventListener('keydown', movePacman);
 startBtn.addEventListener('click', start);
 
+function checkForWin() {
+  if (dotCount === 167) {
+    document.removeEventListener('keydown', movePacman);
+    ghosts.forEach(ghost => ghost.freeze = true);
+    ghosts = null;
+    winner.classList.remove('d-none');
+    if (gameBoard.levelNumber < level.length - 1) {
+      gameBoard.levelNumber++;
+      document.addEventListener('keydown', renderNextLevel, {once: true});
+    } else {
+      gameBoard.levelNumber = 0;
+      document.addEventListener('keydown', renderNextLevel, {once: true});
+    };
+  };
+}
+
+function gameOver() {
+  document.removeEventListener('keydown', movePacman);
+  loser.classList.remove('d-none');
+  document.addEventListener('keydown', () => location.reload());
+}
+
 function renderNextLevel() {
     winner.classList.add('d-none');
     gameBoard.curLevel = level[gameBoard.levelNumber];
