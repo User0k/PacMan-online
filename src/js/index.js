@@ -147,9 +147,11 @@ function killPacman(location) {
   lives--;
   livesDisplay.textContent = lives;
   if (lives > 0) {
+    document.removeEventListener('keydown', movePacman);
     setTimeout(() => {
       curLocation = 290;
       squares[curLocation].classList.add('pacman');
+      document.addEventListener('keydown', movePacman);
     }, 1500);
   } else gameOver();
 }
