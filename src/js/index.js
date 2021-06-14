@@ -11,18 +11,20 @@ const livesDisplay = document.getElementById('lives');
 const startBtn = document.getElementById('start-button');
 const winner = document.getElementById('winner');
 const loser = document.getElementById('loser');
-// other variables
-let curLocation = 290;
-let nextSquare = curLocation;
-let score = 0;
-let powerTime = 10000;
-let scaredTimer = null;
-let ghosts = null;
-let dotCount = null;
+//constants and score counters
 const DOTSCORE = 10;
 const PILLSCORE = 50;
+let score = 0;
+let dotCount = null;
 let scaredScore = 200;
+//pacman locations
+let curLocation = 290;
+let nextSquare = curLocation;
+//other variables
+let powerTime = 10000;
+let scaredTimer = null;
 let lives = 3;
+let ghosts = null;
 const gameBoard = new Board;
 
 function getDots() {
@@ -61,6 +63,7 @@ function movePacman(e) {
       squares[curLocation].classList.remove('pacman');
       curLocation += DIRECTIONS[key].direction;
       squares[curLocation].classList.add('pacman');
+      squares[curLocation].style.transform = `rotate(${DIRECTIONS[key].rotate}deg)`;
     };
   };
   dotEat(curLocation);
