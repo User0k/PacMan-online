@@ -1,6 +1,6 @@
 import('../css/style.css');
-import Board from './gameBoard'
-import { COLUMNS, squares } from './gameBoard';
+import Board, { squares } from './gameBoard'
+import { DIRECTIONS } from './controls';
 import Ghost from './ghosts';
 import level from './levels';
 
@@ -16,7 +16,7 @@ let curLocation = 290;
 let nextSquare = curLocation;
 let score = 0;
 let powerTime = 10000;
-export let scaredTimer = null;
+let scaredTimer = null;
 let ghosts = null;
 let dotCount = null;
 const DOTSCORE = 10;
@@ -24,21 +24,6 @@ const PILLSCORE = 50;
 let scaredScore = 200;
 let lives = 3;
 const gameBoard = new Board;
-// constant to control Pacman
-const DIRECTIONS = {
-  ArrowLeft: {
-    direction: - 1,
-  },
-  ArrowUp: {
-    direction: - COLUMNS,
-  },
-  ArrowRight: {
-    direction: 1,
-  },
-  ArrowDown: {
-    direction: COLUMNS,
-  }
-};
 
 function getDots() {
   dotCount = squares.filter(square => square.classList.contains('dot')).length;
@@ -88,7 +73,7 @@ document.addEventListener('keydown', movePacman);
 startBtn.addEventListener('click', start);
 
 function checkForWin() {
-  if (dotCount === 167) {
+  if (dotCount === 0) {
     document.removeEventListener('keydown', movePacman);
     ghosts.forEach(ghost => ghost.freeze = true);
     ghosts = null;
@@ -149,7 +134,7 @@ function unscare() {
 }
 
 // function that initiates the beginning of the countdown since moment when Pacman have eaten the power-pill
-export function initTimer() {
+function initTimer() {
   scaredTimer = setTimeout(unscare, powerTime);
 }
 
@@ -179,9 +164,11 @@ function killPacman(location) {
 }
 
 //function decides what to do when pacman will meet a ghost or a ghost will meet pacmen
-export function ghostMeetPacman(location) {
+function ghostMeetPacman(location) {
   if (squares[location].classList.contains('ghost')) {
     if (squares[location].classList.contains('scared-ghost')) ghostEat(location);
     else killPacman(location);
   }
 }
+
+export { ghostMeetPacman, initTimer, scaredTimer };
