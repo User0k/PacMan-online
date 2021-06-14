@@ -11,23 +11,33 @@
   font-family: 'MV-Boli', sans-serif;
 }
 
+:root {
+  --square-width: 20px;
+}
+
 body {
   background-color: #000;
 }
 
-.wrapper {
+#wrapper {
+  position: relative;
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
+  height: 90vh;
 }
 
-.game-info {
+#game-info {
+  color: antiquewhite;
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: calc(var(--square-width) * 20);
 }
 
 h1, h2 {
   margin: 0;
-  /* padding: 5px 65px; */
   color: antiquewhite;
   font-size: 34px;
 }
@@ -38,7 +48,7 @@ h1, h2 {
 }
 
 .square {
-  width: 20px;
+  width: var(--square-width);
   height: 20px;
 }
 
@@ -61,15 +71,11 @@ h1, h2 {
   border-radius: 100%;
 }
 
-.pacman {
-  border-radius: 100%;
-  border: 10px solid green;
-}
-
 .ghost {
   position: relative;
   border-radius: 10px 10px 2px 2px;
   border: none;
+  transform: rotate(0) !important;
 }
 
 .ghost::before {
@@ -116,6 +122,40 @@ h1, h2 {
 
 .scared-ghost {
   background: blue !important;
+}
+
+.pacman {
+  background: yellow;
+  border: none;
+  border-radius: 50%;
+  clip-path: polygon(
+    0 0,
+    20px 0,
+    20px -5px,
+    8px 10px,
+    20px 25px,
+    20px 20px,
+    0 20px
+  );
+  animation: chew 0.4s linear forwards infinite;
+}
+
+.rotate-down {
+  transform: rotate(90deg);
+}
+
+@keyframes chew {
+  50% {
+    clip-path: polygon(
+      0 0,
+      20px 0,
+      20px 10px,
+      8px 10px,
+      20px 10px,
+      20px 20px,
+      0 20px
+    );
+  }
 }
 
 #start-button {
