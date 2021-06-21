@@ -1,5 +1,5 @@
 import { squares, COLUMNS } from './gameBoard';
-import { scaredTimer, initTimer, ghostMeetPacman } from './index';
+import { scaredTimer, globalSpeed, initTimer, ghostMeetPacman } from './index';
 
 class Ghost {
   constructor(ghostName, ghostLocation) {
@@ -8,7 +8,7 @@ class Ghost {
     this.nextLocation = ghostLocation;
     this.isScared = false;
     this.freeze = false;
-    this.speed = 400;
+    this.speed = globalSpeed / 3.5;
     this.directions = [-1, -COLUMNS, 1, COLUMNS];
   }
 

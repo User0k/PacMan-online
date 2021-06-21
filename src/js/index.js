@@ -21,7 +21,8 @@ let scaredScore = 200;
 let curLocation = 290;
 let nextSquare = curLocation;
 //other variables
-let powerTime = 10000;
+let globalSpeed = 1000 //ms
+let powerTime = globalSpeed * 10;
 let scaredTimer = null;
 let lives = 3;
 let ghosts = null;
@@ -81,6 +82,7 @@ function checkForWin() {
     ghosts.forEach(ghost => ghost.freeze = true);
     ghosts = null;
     winner.classList.remove('d-none');
+    globalSpeed *= 0.8;
     if (gameBoard.levelNumber < level.length - 1) {
       gameBoard.levelNumber++;
       document.addEventListener('keydown', renderNextLevel, {once: true});
@@ -145,7 +147,7 @@ function ghostEat(location) {
   const eatenGhost = ghosts.find(ghost => ghost.ghostLocation == location);
   squares[location].classList.remove('scared-ghost', eatenGhost.ghostName, 'ghost');
   eatenGhost.isScared = false;
-  //next line will put the eaten ghost into a random square in 228-231 interval (ghost lair)
+  //next line will put the eaten ghost into a random square within 228-231 interval (ghost lair)
   eatenGhost.ghostLocation = Math.ceil(Math.random() * 4 + 227);
   score += scaredScore;
   scaredScore *= 2;
@@ -162,7 +164,7 @@ function killPacman(location) {
       curLocation = 290;
       squares[curLocation].classList.add('pacman');
       document.addEventListener('keydown', movePacman);
-    }, 1500);
+    }, globalSpeed * 1.5);
   } else gameOver();
 }
 
@@ -174,4 +176,4 @@ function ghostMeetPacman(location) {
   }
 }
 
-export { ghostMeetPacman, initTimer, scaredTimer };
+export { ghostMeetPacman, initTimer, scaredTimer, globalSpeed };
