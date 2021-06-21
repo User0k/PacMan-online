@@ -183,3 +183,36 @@ h1, h2 {
 #start-button:hover::before {
   right: -38%;
 }
+
+#winner, #loser {
+  position: absolute;
+  top: 38%;
+  width: 350px;
+  height: 230px;
+  padding-top: 20px;
+  border-radius: 15px;
+  font-size: 32px;
+  color: rgb(255, 230, 0);
+  text-align: center;
+}
+
+#winner {
+  background-color: rgba(21, 177, 34, 0.35);
+  border: solid green 4px;
+}
+
+#loser {
+  background-color: rgba(170, 0, 0, 0.5);
+  border: solid red 4px;
+}
+
+#winner p, #loser p {
+  font-size: 24px;
+  padding-top: 60px;
+  animation: blink 0.8s linear infinite;
+}
+
+@keyframes blink {
+  50% { color: rgb(255, 230, 0); }
+  80% { color: rgba(255, 230, 0, 0); }
+}
