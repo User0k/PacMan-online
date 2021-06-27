@@ -1,5 +1,5 @@
 import('../css/style.css');
-import Board, { squares } from './gameBoard'
+import Board, { COLUMNS, squares } from './gameBoard'
 import { DIRECTIONS } from './controls';
 import Ghost from './ghosts';
 import level from './levels';
@@ -59,14 +59,17 @@ function renderBoard() {
 function movePacman(e) {
   for (let key in DIRECTIONS) {
     nextSquare = squares[curLocation + DIRECTIONS[key].direction]; //variable for better understanding the code
-    if (e.code == key
+    squares[curLocation].classList.remove('pacman');
+    if (e.code === key && curLocation % COLUMNS === DIRECTIONS[key].gridEnd) {
+      curLocation += DIRECTIONS[key].walkThrough;
+      squares[curLocation].style.transform = `rotate(${DIRECTIONS[key].rotate}deg)`;
+    } else if (e.code === key
         && !nextSquare.classList.contains('wall')) {
-      squares[curLocation].classList.remove('pacman');
       curLocation += DIRECTIONS[key].direction;
-      squares[curLocation].classList.add('pacman');
       squares[curLocation].style.transform = `rotate(${DIRECTIONS[key].rotate}deg)`;
     };
-  };
+    squares[curLocation].classList.add('pacman');  };
+
   dotEat(curLocation);
   powerEat(curLocation);
   ghostMeetPacman(curLocation);
@@ -144,7 +147,7 @@ function initTimer() {
 }
 
 function ghostEat(location) {
-  const eatenGhost = ghosts.find(ghost => ghost.ghostLocation == location);
+  const eatenGhost = ghosts.find(ghost => ghost.ghostLocation === location);
   squares[location].classList.remove('scared-ghost', eatenGhost.ghostName, 'ghost');
   eatenGhost.isScared = false;
   //next line will put the eaten ghost into a random square within 228-231 interval (ghost lair)
@@ -163,6 +166,7 @@ function killPacman(location) {
     setTimeout(() => {
       curLocation = 290;
       squares[curLocation].classList.add('pacman');
+      squares[curLocation].style.transform = 'rotate(0deg)';
       document.addEventListener('keydown', movePacman);
     }, globalSpeed * 1.5);
   } else gameOver();
