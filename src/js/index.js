@@ -3,6 +3,7 @@ import Board, { COLUMNS, squares } from './gameBoard'
 import { DIRECTIONS } from './controls';
 import Ghost from './ghosts';
 import level from './levels';
+import { soundBeginning, soundDeath, soundDot, soundEatGhost, soundGameOver, soundPowerPill } from '../sounds';
 
 // DOM
 const hider = document.getElementById('hider');
@@ -32,11 +33,17 @@ function getDots() {
   dotCount = squares.filter(square => square.classList.contains('dot')).length;
 };
 
+function playSound(audio) {
+  const sound = new Audio(audio);
+  sound.play();
+}
+
 function start() {
   startBtn.classList.add('d-none');
   hider.classList.remove('d-none');
   renderBoard();
-};
+  playSound(soundBeginning);
+}
 
 function renderBoard() {
   gameBoard.createBoard();
@@ -47,10 +54,10 @@ function renderBoard() {
     new Ghost('blinky', 228),
     new Ghost('pinky', 229),
     new Ghost('inky', 230),
-    new Ghost('clyde', 231)
+    new Ghost('clyde', 231),
   ];
 
-  ghosts.forEach(ghost => {
+  ghosts.forEach((ghost) => {
     squares[ghost.ghostLocation].classList.add('ghost', ghost.ghostName);
     setInterval(ghost.tryMove.bind(ghost), ghost.speed);
   });
@@ -63,12 +70,12 @@ function movePacman(e) {
     if (e.code === key && curLocation % COLUMNS === DIRECTIONS[key].gridEnd) {
       curLocation += DIRECTIONS[key].walkThrough;
       squares[curLocation].style.transform = `rotate(${DIRECTIONS[key].rotate}deg)`;
-    } else if (e.code === key
-        && !nextSquare.classList.contains('wall')) {
+    } else if (e.code === key && !nextSquare.classList.contains('wall')) {
       curLocation += DIRECTIONS[key].direction;
       squares[curLocation].style.transform = `rotate(${DIRECTIONS[key].rotate}deg)`;
-    };
-    squares[curLocation].classList.add('pacman');  };
+    }
+    squares[curLocation].classList.add('pacman');
+  }
 
   dotEat(curLocation);
   powerEat(curLocation);
@@ -82,7 +89,7 @@ startBtn.addEventListener('click', start);
 function checkForWin() {
   if (dotCount === 0) {
     document.removeEventListener('keydown', movePacman);
-    ghosts.forEach(ghost => ghost.freeze = true);
+    ghosts.forEach((ghost) => (ghost.freeze = true));
     ghosts = null;
     winner.classList.remove('d-none');
     globalSpeed *= 0.8;
@@ -100,19 +107,20 @@ function gameOver() {
   document.removeEventListener('keydown', movePacman);
   loser.classList.remove('d-none');
   document.addEventListener('keydown', () => location.reload());
+  playSound(soundGameOver);
 }
 
 function renderNextLevel() {
-    winner.classList.add('d-none');
-    gameBoard.curLevel = level[gameBoard.levelNumber];
-    gameBoard.clearBoard();
-    renderBoard();
-    squares[curLocation].classList.remove('pacman');
-    curLocation = 290;
-    squares[curLocation].classList.add('pacman');
-    document.addEventListener('keydown', movePacman);
-    const grids = document.querySelectorAll('.grid');
-    gameBoard.wrapper.removeChild(grids[1]);
+  winner.classList.add('d-none');
+  gameBoard.curLevel = level[gameBoard.levelNumber];
+  gameBoard.clearBoard();
+  renderBoard();
+  squares[curLocation].classList.remove('pacman');
+  curLocation = 290;
+  squares[curLocation].classList.add('pacman');
+  document.addEventListener('keydown', movePacman);
+  const grids = document.querySelectorAll('.grid');
+  gameBoard.wrapper.removeChild(grids[1]);
 }
 
 function dotEat(location) {
@@ -121,7 +129,8 @@ function dotEat(location) {
     score += DOTSCORE;
     scoreDisplay.textContent = score;
     dotCount--;
-  };
+    playSound(soundDot);
+  }
 }
 
 function powerEat(location) {
@@ -131,6 +140,7 @@ function powerEat(location) {
     scoreDisplay.textContent = score;
     scaredScore = 200;
     ghosts.forEach(ghost => ghost.scare());
+    playSound(soundPowerPill);
   }
 }
 
@@ -155,6 +165,7 @@ function ghostEat(location) {
   score += scaredScore;
   scaredScore *= 2;
   scoreDisplay.textContent = score;
+  playSound(soundEatGhost);
 }
 
 function killPacman(location) {
@@ -169,6 +180,7 @@ function killPacman(location) {
       squares[curLocation].style.transform = 'rotate(0deg)';
       document.addEventListener('keydown', movePacman);
     }, globalSpeed * 1.5);
+    playSound(soundDeath);
   } else gameOver();
 }
 
