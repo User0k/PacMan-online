@@ -177,7 +177,6 @@ function killPacman(location) {
     setTimeout(() => {
       curLocation = 290;
       squares[curLocation].classList.add('pacman');
-      squares[curLocation].style.transform = 'rotate(0deg)';
       document.addEventListener('keydown', movePacman);
     }, globalSpeed * 1.5);
     playSound(soundDeath);

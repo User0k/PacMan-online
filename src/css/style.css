@@ -57,6 +57,7 @@ h1, h2 {
 }
 
 .wall {
+  background-color: rgba(190, 190, 190);
   background-image: url('../img/wall.jpg');
 }
 
@@ -138,10 +139,6 @@ h1, h2 {
     0 20px
   );
   animation: chew 0.4s linear forwards infinite;
-}
-
-.rotate-down {
-  transform: rotate(90deg);
 }
 
 @keyframes chew {
