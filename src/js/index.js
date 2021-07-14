@@ -3,6 +3,7 @@ import Board, { COLUMNS, squares } from './gameBoard'
 import { DIRECTIONS } from './controls';
 import Ghost from './ghosts';
 import level from './levels';
+import { delayStart, delayCounter } from './delay';
 import { soundBeginning, soundDeath, soundDot, soundEatGhost, soundGameOver, soundPowerPill } from '../sounds';
 
 // DOM
@@ -10,6 +11,7 @@ const hider = document.getElementById('hider');
 const scoreDisplay = document.getElementById('score');
 const livesDisplay = document.getElementById('lives');
 const startBtn = document.getElementById('start-button');
+const startDelay = document.getElementById('start-delay');
 const winner = document.getElementById('winner');
 const loser = document.getElementById('loser');
 //constants and score counters
@@ -46,10 +48,10 @@ function start() {
   ghosts.forEach(ghost => ghost.freeze = true);
   delayStart(delayCounter);
   setTimeout(() => {
-    startDelay.innerHTML = '';
+    startDelay.classList.add('d-none');
     document.addEventListener('keydown', movePacman);
     ghosts.forEach(ghost => ghost.freeze = false);
-  }, delayCounter.reduce((a, b) => a + b[1], 400));
+  }, delayCounter.reduce((acc, val) => acc + val[1], 400));
 }
 
 function renderBoard() {
@@ -197,4 +199,4 @@ function ghostMeetPacman(location) {
   }
 }
 
-export { ghostMeetPacman, initTimer, scaredTimer, globalSpeed };
+export { ghostMeetPacman, initTimer, scaredTimer, globalSpeed, startDelay };
