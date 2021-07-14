@@ -213,10 +213,3 @@ h1, h2 {
   50% { color: rgb(255, 230, 0); }
   80% { color: rgba(255, 230, 0, 0); }
 }
-
-#start-delay {
-  position: absolute;
-  font-size: 100px;
-  color: rgb(0, 196, 10);
-  z-index: 99;
-}

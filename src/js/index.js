@@ -3,7 +3,6 @@ import Board, { COLUMNS, squares } from './gameBoard'
 import { DIRECTIONS } from './controls';
 import Ghost from './ghosts';
 import level from './levels';
-import { delayCounter, delayStart } from './delay';
 import { soundBeginning, soundDeath, soundDot, soundEatGhost, soundGameOver, soundPowerPill } from '../sounds';
 
 // DOM
@@ -11,7 +10,6 @@ const hider = document.getElementById('hider');
 const scoreDisplay = document.getElementById('score');
 const livesDisplay = document.getElementById('lives');
 const startBtn = document.getElementById('start-button');
-const startDelay = document.getElementById('start-delay');
 const winner = document.getElementById('winner');
 const loser = document.getElementById('loser');
 //constants and score counters
@@ -199,4 +197,4 @@ function ghostMeetPacman(location) {
   }
 }
 
-export { ghostMeetPacman, initTimer, scaredTimer, globalSpeed, startDelay };
+export { ghostMeetPacman, initTimer, scaredTimer, globalSpeed };
