@@ -45,7 +45,13 @@ function start() {
   hider.classList.remove('d-none');
   renderBoard();
   playSound(soundBeginning);
+  ghosts.forEach(ghost => ghost.freeze = true);
   delayStart(delayCounter);
+  setTimeout(() => {
+    startDelay.innerHTML = '';
+    document.addEventListener('keydown', movePacman);
+    ghosts.forEach(ghost => ghost.freeze = false);
+  }, delayCounter.reduce((a, b) => a + b[1], 400));
 }
 
 function renderBoard() {
@@ -86,7 +92,6 @@ function movePacman(e) {
   checkForWin();
 }
 
-document.addEventListener('keydown', movePacman);
 startBtn.addEventListener('click', start);
 
 function checkForWin() {
