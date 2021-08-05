@@ -14,16 +14,16 @@ const startBtn = document.getElementById('start-button');
 const startDelay = document.getElementById('start-delay');
 const winner = document.getElementById('winner');
 const loser = document.getElementById('loser');
-//constants and score counters
+// constants and score counters
 const DOTSCORE = 10;
 const PILLSCORE = 50;
 let score = 0;
 let dotCount = null;
 let scaredScore = 200;
-//pacman locations
+// pacman locations
 let curLocation = 290;
 let nextSquare = curLocation;
-//other variables
+// other variables
 let globalSpeed = 1000 //ms
 let powerTime = globalSpeed * 10;
 let scaredTimer = null;
@@ -34,25 +34,6 @@ const gameBoard = new Board;
 function getDots() {
   dotCount = squares.filter(square => square.classList.contains('dot')).length;
 };
-
-function playSound(audio) {
-  const sound = new Audio(audio);
-  sound.play();
-}
-
-function start() {
-  startBtn.classList.add('d-none');
-  hider.classList.remove('d-none');
-  renderBoard();
-  playSound(soundBeginning);
-  ghosts.forEach(ghost => ghost.freeze = true);
-  delayStart(delayCounter);
-  setTimeout(() => {
-    startDelay.classList.add('d-none');
-    document.addEventListener('keydown', movePacman);
-    ghosts.forEach(ghost => ghost.freeze = false);
-  }, delayCounter.reduce((acc, val) => acc + val[1], 400));
-}
 
 function renderBoard() {
   gameBoard.createBoard();
@@ -72,9 +53,44 @@ function renderBoard() {
   });
 }
 
+function playSound(audio) {
+  const sound = new Audio(audio);
+  sound.play();
+}
+
+// invokes only once after the user clicks the start button
+function start() {
+  startBtn.classList.add('d-none');
+  hider.classList.remove('d-none');
+  renderBoard();
+  playSound(soundBeginning);
+  ghosts.forEach(ghost => ghost.freeze = true);
+  delayStart(delayCounter);
+  setTimeout(() => {
+    startDelay.classList.add('d-none');
+    document.addEventListener('keydown', movePacman);
+    ghosts.forEach(ghost => ghost.freeze = false);
+  }, delayCounter.reduce((acc, val) => acc + val[1], 400));
+}
+
+// invokes every time the user starts the next level.
+// Serves as a decorator to 'renderBoard' function, places pacman on the board and hanles its listener
+function renderNextLevel() {
+  winner.classList.add('d-none');
+  gameBoard.curLevel = level[gameBoard.levelNumber];
+  gameBoard.clearBoard();
+  renderBoard();
+  squares[curLocation].classList.remove('pacman');
+  curLocation = 290;
+  squares[curLocation].classList.add('pacman');
+  document.addEventListener('keydown', movePacman);
+  const grids = document.querySelectorAll('.grid');
+  gameBoard.wrapper.removeChild(grids[1]);
+}
+
 function movePacman(e) {
   for (let key in DIRECTIONS) {
-    nextSquare = squares[curLocation + DIRECTIONS[key].direction]; //variable for better understanding the code
+    nextSquare = squares[curLocation + DIRECTIONS[key].direction]; // variable for better understanding the code
     squares[curLocation].classList.remove('pacman');
     if (e.code === key && curLocation % COLUMNS === DIRECTIONS[key].gridEnd) {
       curLocation += DIRECTIONS[key].walkThrough;
@@ -92,8 +108,40 @@ function movePacman(e) {
   checkForWin();
 }
 
-startBtn.addEventListener('click', start);
+function dotEat(location) {
+  if (squares[location].classList.contains('dot')) {
+    squares[location].classList.remove('dot');
+    score += DOTSCORE;
+    scoreDisplay.textContent = score;
+    dotCount--;
+    playSound(soundDot);
+  }
+}
 
+function powerEat(location) {
+  if (squares[location].classList.contains('power-pill')) {
+    squares[location].classList.remove('power-pill');
+    score += PILLSCORE;
+    scoreDisplay.textContent = score;
+    scaredScore = 200;
+    ghosts.forEach(ghost => ghost.scare());
+    playSound(soundPowerPill);
+  }
+}
+
+function ghostEat(location) {
+  const eatenGhost = ghosts.find(ghost => ghost.ghostLocation === location);
+  squares[location].classList.remove('scared-ghost', eatenGhost.ghostName, 'ghost');
+  eatenGhost.isScared = false;
+  //next line will put the eaten ghost into a random square within 228-231 interval (ghost lair)
+  eatenGhost.ghostLocation = Math.ceil(Math.random() * 4 + 227);
+  score += scaredScore;
+  scaredScore *= 2;
+  scoreDisplay.textContent = score;
+  playSound(soundEatGhost);
+}
+
+// checks if the user has collcted all the dots, and if so, call the next level (or the first one if the levels array has ended)
 function checkForWin() {
   if (dotCount === 0) {
     document.removeEventListener('keydown', movePacman);
@@ -118,40 +166,7 @@ function gameOver() {
   playSound(soundGameOver);
 }
 
-function renderNextLevel() {
-  winner.classList.add('d-none');
-  gameBoard.curLevel = level[gameBoard.levelNumber];
-  gameBoard.clearBoard();
-  renderBoard();
-  squares[curLocation].classList.remove('pacman');
-  curLocation = 290;
-  squares[curLocation].classList.add('pacman');
-  document.addEventListener('keydown', movePacman);
-  const grids = document.querySelectorAll('.grid');
-  gameBoard.wrapper.removeChild(grids[1]);
-}
-
-function dotEat(location) {
-  if (squares[location].classList.contains('dot')) {
-    squares[location].classList.remove('dot');
-    score += DOTSCORE;
-    scoreDisplay.textContent = score;
-    dotCount--;
-    playSound(soundDot);
-  }
-}
-
-function powerEat(location) {
-  if (squares[location].classList.contains('power-pill')) {
-    squares[location].classList.remove('power-pill');
-    score += PILLSCORE;
-    scoreDisplay.textContent = score;
-    scaredScore = 200;
-    ghosts.forEach(ghost => ghost.scare());
-    playSound(soundPowerPill);
-  }
-}
-
+// allows the ghost to become 'normal' after it had been eaten or power-pill time has expired
 function unscare() {
   ghosts.forEach(ghost => {
     ghost.isScared = false;
@@ -162,18 +177,6 @@ function unscare() {
 // function that initiates the beginning of the countdown since moment when Pacman have eaten the power-pill
 function initTimer() {
   scaredTimer = setTimeout(unscare, powerTime);
-}
-
-function ghostEat(location) {
-  const eatenGhost = ghosts.find(ghost => ghost.ghostLocation === location);
-  squares[location].classList.remove('scared-ghost', eatenGhost.ghostName, 'ghost');
-  eatenGhost.isScared = false;
-  //next line will put the eaten ghost into a random square within 228-231 interval (ghost lair)
-  eatenGhost.ghostLocation = Math.ceil(Math.random() * 4 + 227);
-  score += scaredScore;
-  scaredScore *= 2;
-  scoreDisplay.textContent = score;
-  playSound(soundEatGhost);
 }
 
 function killPacman(location) {
@@ -198,5 +201,7 @@ function ghostMeetPacman(location) {
     else killPacman(location);
   }
 }
+
+startBtn.addEventListener('click', start);
 
 export { ghostMeetPacman, initTimer, scaredTimer, globalSpeed, startDelay };
